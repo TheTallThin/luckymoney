@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <appender name="consoleLog"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <!-- <pattern>%d - %msg%n</pattern> -->
+            <pattern>[%-5p] %d{yyy MMM dd HH:mm:ss} -->[%F:%L] %m%n</pattern>
+        </layout>
+    </appender>
+
+    <!--错误文件输出到文件-->
+    <appender name="fileInfoLog"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>[%-5p] %d{yyy MMM dd HH:mm:ss} -->[%F:%L] %m%n</pattern>
+        </encoder>
+        <!--滚动策略 -->
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--路径 -->
+            <fileNamePattern>logs/info.%d.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="fileErrorLog"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>[%-5p] %d{yyy MMM dd HH:mm:ss} -->[%F:%L] %m%n</pattern>
+        </encoder>
+        <!--滚动策略 -->
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--路径 -->
+            <fileNamePattern>logs/error.%d.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+    </appender>
+    <appender name="kafkaAppender" class="com.github.danielwegener.logback.kafka.KafkaAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <pattern>
+                    <pattern>
+                        {
+                        "tags": ["product_logs_kafka","product","weichat"],
+                        "project": "weichat",
+                        "logger": "%logger",
+                        "timestamp": "%date{\"yyyy-MM-dd'T'HH:mm:ss,SSSZ\"}",
+                        "class": "%class",
+                        "contextName": "%cn",
+                        "file": "%file",
+                        "line": "%line",
+                        "msg": "%msg",
+                        "method": "%method",
+                        "level": "%level",
+                        "thread": "%thread"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+        <topic>kafka-log</topic>
+        <!-- 我们不关心日志消息将如何分区 -->
+        <keyingStrategy
+                class="com.github.danielwegener.logback.kafka.keying.NoKeyKeyingStrategy" />
+        <!-- 使用异步交付。应用程序线程不会被日志阻塞 -->
+        <deliveryStrategy
+                class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy" />
+        <!-- each <producerConfig> translates to regular kafka-client config (format:
+            key=value) -->
+        <!-- 制作人配置文件在这里:: https://kafka.apache.org/documentation.html#newproducerconfigs -->
+        <!-- bootstrap.servers is the only mandatory producerConfig -->
+        <producerConfig>bootstrap.servers=192.168.0.107:9092</producerConfig>
+        <!--<producerConfig>bootstrap.servers=node-str-corePBOn:9092,node-str-coremrKo:9092,node-str-corejIQc:9092
+        </producerConfig>-->
+        <!-- don't wait for a broker to ack the reception of a batch. -->
+        <producerConfig>acks=0</producerConfig>
+        <!-- 日志信息收集后发送，等待时间最长为1000ms
+            一批 -->
+        <producerConfig>linger.ms=1000</producerConfig>
+        <!-- 即使生产者缓冲区已满，也不要阻塞应用程序
+            但开始删除消息 -->
+        <producerConfig>max.block.ms=0</producerConfig>
+        <!-- define a client-id that you use to identify yourself against the kafka
+            broker -->
+        <producerConfig>client.id=weichat-logback-relaxed</producerConfig>
+    </appender>
+
+    <root level="info">
+        <!-- <appender-ref ref="consoleLog" />  -->
+        <appender-ref ref="fileInfoLog" />
+        <appender-ref ref="fileErrorLog" />
+        <appender-ref ref="kafkaAppender" />
+    </root>
+</configuration>
