@@ -72,10 +72,10 @@
         <topic>kafka-log</topic>
         <!-- 我们不关心日志消息将如何分区 -->
         <keyingStrategy
-                class="com.github.danielwegener.logback.kafka.keying.NoKeyKeyingStrategy" />
+                class="com.github.danielwegener.logback.kafka.keying.NoKeyKeyingStrategy"/>
         <!-- 使用异步交付。应用程序线程不会被日志阻塞 -->
         <deliveryStrategy
-                class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy" />
+                class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy"/>
         <!-- each <producerConfig> translates to regular kafka-client config (format:
             key=value) -->
         <!-- 制作人配置文件在这里:: https://kafka.apache.org/documentation.html#newproducerconfigs -->
@@ -98,8 +98,8 @@
 
     <root level="info">
         <!-- <appender-ref ref="consoleLog" />  -->
-        <appender-ref ref="fileInfoLog" />
-        <appender-ref ref="fileErrorLog" />
-        <appender-ref ref="kafkaAppender" />
+        <appender-ref ref="fileInfoLog"/>
+        <appender-ref ref="fileErrorLog"/>
+        <appender-ref ref="kafkaAppender"/>
     </root>
 </configuration>

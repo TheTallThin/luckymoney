@@ -5,10 +5,10 @@
         debug: 当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false -->
     <!--    <statusListener class="com.example.CustomOnConsoleStatusListener"/>-->
     <!-- 应用名称 -->
-    <property name="app_name" value="nacos" />
+    <property name="app_name" value="nacos"/>
 
     <!--日志文件的保存路径,首先查找系统属性-Dlog.dir,如果存在就使用其；否则，在当前目录下创建名为logs目录做日志存放的目录 -->
-    <property name="log_home" value="${log.dir:-logs}/${app_name}" />
+    <property name="log_home" value="${log.dir:-logs}/${app_name}"/>
 
     <!-- 日志输出格式 -->
     <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
@@ -16,17 +16,17 @@
     <!--              value="%-5level \t %d{yyyy-MM-dd HH:mm:ss.SSS} \t %msg \t [%thread] \t %logger{80}%n" />-->
     <!--    （这个是输出带彩色的格式，看起来酷炫一点）-->
     <property name="console_pattern"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} - %msg %n" />
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} - %msg %n"/>
     <!--              value="[%highlight(%-5level)]%green([%date{yyyy-MM-dd HH:mm:ss}]) %boldMagenta([%thread-%logger{96}-%mdc{client}-%line line])  - %cyan(%msg%n)"/>-->
 
     <property name="warn_pattern"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} - %msg %n" />
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} - %msg %n"/>
 
     <property name="info_pattern"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} - %msg %n" />
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} - %msg %n"/>
 
     <property name="error_pattern"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} - %msg %n" />
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} - %msg %n"/>
 
     <contextName>${app_name}</contextName>
     <!-- 信息输出到文件 -->
@@ -65,14 +65,20 @@
         </filter>
     </appender>
       <!--输出到logstash的appender-->
-      <appender name="logStash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <!--可以访问的logstash日志收集端口-->
-        <destination>192.168.130.127:4560</destination>
-        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
-          <!--自定义字段，区分应用名称-->
-          <customFields>{"appname":"nacos-tr"}</customFields>
-        </encoder>
-      </appender>
+     
+    <appender name="logStash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <!--可以访问的logstash日志收集端口-->
+           
+        <destination>192.168.130.127:4560</destination>
+           
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+                  <!--自定义字段，区分应用名称-->
+                 
+            <customFields>{"appname":"nacos-tr"}</customFields>
+               
+        </encoder>
+         
+    </appender>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
@@ -87,11 +93,11 @@
 
     </appender>
     <root>
-        <level value="INFO" />
-        <appender-ref ref="info" />
-        <appender-ref ref="error" />
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="logStash" />
+        <level value="INFO"/>
+        <appender-ref ref="info"/>
+        <appender-ref ref="error"/>
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="logStash"/>
     </root>
 
 </configuration>

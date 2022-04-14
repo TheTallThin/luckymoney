@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ProducerApp {
     private static Logger logger = LoggerFactory.getLogger(ProducerApp.class);
+
     public static void main(String[] args) {
         SpringApplication.run(ProducerApp.class, args);
     }
@@ -23,12 +24,12 @@ public class ProducerApp {
     @GetMapping("/log_test")
     public String test() {
         for (int i = 0; i < 10; i++) {
-            logger.info("info正常的测试测试测试测试测试测试测试测试测试测试测试测试-"+i);
-            logger.debug("debuggger测试测试测试测试测试测试测试测试测试测试测试测试-"+i);
-            logger.warn("warn测试测试测试测试测试测试测试测试测试测试-"+i);
-            logger.error("error测试测试测试测试测试测试测试测试测试测试测试测试测试测试-"+i);
+            logger.info("info正常的测试测试测试测试测试测试测试测试测试测试测试测试-" + i);
+            logger.debug("debuggger测试测试测试测试测试测试测试测试测试测试测试测试-" + i);
+            logger.warn("warn测试测试测试测试测试测试测试测试测试测试-" + i);
+            logger.error("error测试测试测试测试测试测试测试测试测试测试测试测试测试测试-" + i);
         }
-        System.out.println(1/0);
+        System.out.println(1 / 0);
         return "success";
     }
 }
